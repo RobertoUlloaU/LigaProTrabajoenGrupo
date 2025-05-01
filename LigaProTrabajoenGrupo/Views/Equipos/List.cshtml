@@ -1,0 +1,191 @@
+﻿@model IEnumerable<LigaProTrabajoenGrupo.Models.Equipo>
+
+@{
+    ViewData["Title"] = "Lista de Equipos";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<p>
+    <a asp-action="Create" class="btn btn-success">Crear Nuevo</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.Nombre)</th>
+            <th>@Html.DisplayNameFor(model => model.Descripcion)</th>
+            <th>@Html.DisplayNameFor(model => model.Logo)</th>
+            <th>@Html.DisplayNameFor(model => model.Presupuesto)</th>
+            <th>@Html.DisplayNameFor(model => model.PartidosJugados)</th>
+            <th>@Html.DisplayNameFor(model => model.PartidosGanados)</th>
+            <th>@Html.DisplayNameFor(model => model.PartidosEmpatados)</th>
+            <th>@Html.DisplayNameFor(model => model.PartidosPerdidos)</th>
+            <th>Acciones</th> <!-- Columna de Acciones -->
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Nombre</td>
+                <td>@item.Descripcion</td>
+                <td>@item.Logo</td>
+                <td>@item.Presupuesto</td>
+                <td>@item.PartidosJugados</td>
+                <td>@item.PartidosGanados</td>
+                <td>@item.PartidosEmpatados</td>
+                <td>@item.PartidosPerdidos</td>
+                <td>
+                    <!-- Botón para abrir el modal de edición -->
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editModal"
+                            onclick="openEditModal(@item.EquipoId, '@item.Nombre', '@item.Descripcion', '@item.Logo', @item.Presupuesto, @item.PartidosJugados, @item.PartidosGanados, @item.PartidosEmpatados, @item.PartidosPerdidos)">
+                        Editar
+                    </button> |
+                    <!-- Botón para abrir el modal de detalles -->
+                    <a class="btn btn-info" data-bs-toggle="modal" data-bs-target="#detailsModal"
+                       onclick="openDetailsModal('@item.EquipoId', '@item.Nombre', '@item.Descripcion', '@item.Logo', @item.Presupuesto, @item.PartidosJugados, @item.PartidosGanados, @item.PartidosEmpatados, @item.PartidosPerdidos)">
+                        Detalles
+                    </a> |
+                    <!-- Botón para abrir el modal de eliminación -->
+                    <a class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal"
+                       onclick="openDeleteModal(@item.EquipoId, '@item.Nombre')">Eliminar</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<!-- Modal para editar equipo -->
+<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editModalLabel">Editar Equipo</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editForm" method="post" enctype="multipart/form-data">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" id="EquipoId" name="EquipoId" />
+
+                    <div class="form-group">
+                        <label for="Nombre">Nombre</label>
+                        <input type="text" class="form-control" id="Nombre" name="Nombre" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Descripcion">Descripción</label>
+                        <textarea class="form-control" id="Descripcion" name="Descripcion" rows="4"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Logo">Logo</label>
+                        <input type="file" class="form-control" id="Logo" name="Logo" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Presupuesto">Presupuesto</label>
+                        <input type="number" class="form-control" id="Presupuesto" name="Presupuesto" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="PartidosJugados">Partidos Jugados</label>
+                        <input type="number" class="form-control" id="PartidosJugados" name="PartidosJugados" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="PartidosGanados">Partidos Ganados</label>
+                        <input type="number" class="form-control" id="PartidosGanados" name="PartidosGanados" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="PartidosEmpatados">Partidos Empatados</label>
+                        <input type="number" class="form-control" id="PartidosEmpatados" name="PartidosEmpatados" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="PartidosPerdidos">Partidos Perdidos</label>
+                        <input type="number" class="form-control" id="PartidosPerdidos" name="PartidosPerdidos" />
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para mostrar detalles del equipo -->
+<div class="modal fade" id="detailsModal" tabindex="-1" aria-labelledby="detailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="detailsModalLabel">Detalles del Equipo</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <dl class="row">
+                    <dt class="col-sm-2">Nombre</dt>
+                    <dd class="col-sm-10" id="detailsNombre"></dd>
+                    <dt class="col-sm-2">Descripción</dt>
+                    <dd class="col-sm-10" id="detailsDescripcion"></dd>
+                    <dt class="col-sm-2">Logo</dt>
+                    <dd class="col-sm-10" id="detailsLogo"></dd>
+                    <dt class="col-sm-2">Presupuesto</dt>
+                    <dd class="col-sm-10" id="detailsPresupuesto"></dd>
+                    <dt class="col-sm-2">Partidos Jugados</dt>
+                    <dd class="col-sm-10" id="detailsPartidosJugados"></dd>
+                    <dt class="col-sm-2">Partidos Ganados</dt>
+                    <dd class="col-sm-10" id="detailsPartidosGanados"></dd>
+                    <dt class="col-sm-2">Partidos Empatados</dt>
+                    <dd class="col-sm-10" id="detailsPartidosEmpatados"></dd>
+                    <dt class="col-sm-2">Partidos Perdidos</dt>
+                    <dd class="col-sm-10" id="detailsPartidosPerdidos"></dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Función para abrir el modal de detalles y llenar los campos
+        function openDetailsModal(id, nombre, descripcion, logo, presupuesto, partidosJugados, partidosGanados, partidosEmpatados, partidosPerdidos) {
+            // Asignamos los valores de los campos al modal de detalles
+            document.getElementById('detailsNombre').textContent = nombre;
+            document.getElementById('detailsDescripcion').textContent = descripcion;
+            document.getElementById('detailsLogo').textContent = logo;
+            document.getElementById('detailsPresupuesto').textContent = presupuesto;
+            document.getElementById('detailsPartidosJugados').textContent = partidosJugados;
+            document.getElementById('detailsPartidosGanados').textContent = partidosGanados;
+            document.getElementById('detailsPartidosEmpatados').textContent = partidosEmpatados;
+            document.getElementById('detailsPartidosPerdidos').textContent = partidosPerdidos;
+        }
+
+        // Función para abrir el modal de editar y llenar los campos
+        function openEditModal(id, nombre, descripcion, logo, presupuesto, partidosJugados, partidosGanados, partidosEmpatados, partidosPerdidos) {
+            document.getElementById('EquipoId').value = id;
+            document.getElementById('Nombre').value = nombre;
+            document.getElementById('Descripcion').value = descripcion;
+            document.getElementById('Logo').value = logo;
+            document.getElementById('Presupuesto').value = presupuesto;
+            document.getElementById('PartidosJugados').value = partidosJugados;
+            document.getElementById('PartidosGanados').value = partidosGanados;
+            document.getElementById('PartidosEmpatados').value = partidosEmpatados;
+            document.getElementById('PartidosPerdidos').value = partidosPerdidos;
+        }
+
+        // Función para abrir el modal de eliminación y mostrar el nombre del equipo
+        function openDeleteModal(id, nombre) {
+            document.getElementById('deleteEquipoId').value = id;
+            document.getElementById('deleteEquipoName').textContent = "Equipo: " + nombre;
+        }
+    </script>
+}
+
+
+
+
+
+

@@ -5,6 +5,7 @@ namespace LigaProTrabajoenGrupo.Models
     public class Equipo
     {
         [Key]
+        [ScaffoldColumn(false)] //no debe generar un campo de entrada
         public int EquipoId { get; set; }
 
         [Required(ErrorMessage = "El nombre del equipo es obligatorio.")]
@@ -33,6 +34,7 @@ namespace LigaProTrabajoenGrupo.Models
         public int PartidosPerdidos { get; set; }
 
         // Calculo de puntos (3 puntos por victoria, 1 por empate)
+        [ScaffoldColumn(false)] //no debe generar un campo de entrada
         public int Puntos
         {
             get
