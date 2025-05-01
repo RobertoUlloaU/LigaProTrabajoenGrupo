@@ -4,102 +4,84 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using LigaProTrabajoenGrupo.Models;
 using Microsoft.AspNetCore.Http;
+using LigaProTrabajoenGrupo.Models;
 
 namespace LigaProTrabajoenGrupo.Controllers
 {
     public class EquiposController : Controller
     {
-        private readonly DBSqlSERVERLigaProECU _context;
-
-        public EquiposController(DBSqlSERVERLigaProECU context)
+        // Lista en memoria para mantener los equipos
+        private static List<Equipo> equipos = new List<Equipo>
         {
-            _context = context;
-        }
+            new Equipo
+            {
+                EquipoId = 1,
+                Nombre = "Liga Deportiva Universitaria",
+                PartidosJugados = 10,
+                PartidosGanados = 7,
+                PartidosEmpatados = 2,
+                PartidosPerdidos = 1
+            },
+            new Equipo
+            {
+                EquipoId = 2,
+                Nombre = "Barcelona SC",
+                PartidosJugados = 10,
+                PartidosGanados = 6,
+                PartidosEmpatados = 2,
+                PartidosPerdidos = 2
+            },
+            new Equipo
+            {
+                EquipoId = 3,
+                Nombre = "Emelec",
+                PartidosJugados = 10,
+                PartidosGanados = 5,
+                PartidosEmpatados = 3,
+                PartidosPerdidos = 2
+            },
+            new Equipo
+            {
+                EquipoId = 4,
+                Nombre = "El Nacional",
+                PartidosJugados = 10,
+                PartidosGanados = 4,
+                PartidosEmpatados = 3,
+                PartidosPerdidos = 3
+            },
+            new Equipo
+            {
+                EquipoId = 5,
+                Nombre = "Delfín SC",
+                PartidosJugados = 10,
+                PartidosGanados = 3,
+                PartidosEmpatados = 4,
+                PartidosPerdidos = 3
+            }
+        };
 
         // GET: Equipos
-        public async Task<IActionResult> List()
+        public IActionResult List()
         {
-            // Traemos todos los equipos desde la base de datos
-            var equipos = await _context.Equipo.ToListAsync();
-
-            // Si no tienes equipos en la base de datos, los predefinidos aparecerán aquí
-            if (equipos.Count == 0)
+            // Calcular los puntos para cada equipo
+            foreach (var equipo in equipos)
             {
-                // Crear las instancias de los equipos predefinidos solo si no hay equipos en la base de datos
-                Equipo ldu = new Equipo
-                {
-                    EquipoId = 1,
-                    Nombre = "Liga Deportiva Universitaria",
-                    PartidosJugados = 10,
-                    PartidosGanados = 7,
-                    PartidosEmpatados = 2,
-                    PartidosPerdidos = 1
-                };
-
-                Equipo bsc = new Equipo
-                {
-                    EquipoId = 2,
-                    Nombre = "Barcelona SC",
-                    PartidosJugados = 10,
-                    PartidosGanados = 6,
-                    PartidosEmpatados = 2,
-                    PartidosPerdidos = 2
-                };
-
-                Equipo emelec = new Equipo
-                {
-                    EquipoId = 3,
-                    Nombre = "Emelec",
-                    PartidosJugados = 10,
-                    PartidosGanados = 5,
-                    PartidosEmpatados = 3,
-                    PartidosPerdidos = 2
-                };
-
-                Equipo elNacional = new Equipo
-                {
-                    EquipoId = 4,
-                    Nombre = "El Nacional",
-                    PartidosJugados = 10,
-                    PartidosGanados = 4,
-                    PartidosEmpatados = 3,
-                    PartidosPerdidos = 3
-                };
-
-                Equipo delfinSC = new Equipo
-                {
-                    EquipoId = 5,
-                    Nombre = "Delfín SC",
-                    PartidosJugados = 10,
-                    PartidosGanados = 3,
-                    PartidosEmpatados = 4,
-                    PartidosPerdidos = 3
-                };
-
-                
-                equipos.Add(ldu);
-                equipos.Add(bsc);
-                equipos.Add(emelec);
-                equipos.Add(elNacional);
-                equipos.Add(delfinSC);
+                equipo.Puntos = (equipo.PartidosGanados * 3) + (equipo.PartidosEmpatados);
             }
 
-            return View(equipos); // Retornar la vista con los equipos, ya sean predefinidos o guardados
+            return View(equipos); // Retornamos la vista con la lista de equipos
         }
 
         // GET: Equipos/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public IActionResult Details(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var equipo = await _context.Equipo
-                .FirstOrDefaultAsync(m => m.EquipoId == id);
+            var equipo = equipos.FirstOrDefault(e => e.EquipoId == id);
             if (equipo == null)
             {
                 return NotFound();
@@ -117,47 +99,53 @@ namespace LigaProTrabajoenGrupo.Controllers
         // POST: Equipos/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("EquipoId,Nombre,Descripcion,Logo,Presupuesto,PartidosJugados,PartidosGanados,PartidosEmpatados,PartidosPerdidos")] Equipo equipo, IFormFile Logo)
+        public IActionResult Create([Bind("EquipoId,Nombre,Descripcion,Logo,Presupuesto,PartidosJugados,PartidosGanados,PartidosEmpatados,PartidosPerdidos")] Equipo equipo, IFormFile Logo)
         {
             if (ModelState.IsValid)
             {
+                // Si se ha subido un logo, lo guardamos
                 if (Logo != null)
                 {
                     var logoPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", Logo.FileName);
                     using (var stream = new FileStream(logoPath, FileMode.Create))
                     {
-                        await Logo.CopyToAsync(stream);
+                        Logo.CopyTo(stream);
                     }
                     equipo.Logo = Logo.FileName;
                 }
 
-                _context.Add(equipo);
-                await _context.SaveChangesAsync();
+                // Asignar un nuevo ID de equipo
+                equipo.EquipoId = equipos.Count + 1;
+
+                // Agregar el equipo a la lista en memoria
+                equipos.Add(equipo);
+
                 return RedirectToAction(nameof(List));
             }
             return View(equipo);
         }
 
         // GET: Equipos/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public IActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var equipo = await _context.Equipo.FindAsync(id);
+            var equipo = equipos.FirstOrDefault(e => e.EquipoId == id);
             if (equipo == null)
             {
                 return NotFound();
             }
+
             return View(equipo);
         }
 
         // POST: Equipos/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("EquipoId,Nombre,Descripcion,Logo,Presupuesto,PartidosJugados,PartidosGanados,PartidosEmpatados,PartidosPerdidos")] Equipo equipo, IFormFile Logo)
+        public IActionResult Edit(int id, [Bind("EquipoId,Nombre,Descripcion,Logo,Presupuesto,PartidosJugados,PartidosGanados,PartidosEmpatados,PartidosPerdidos")] Equipo equipo, IFormFile Logo)
         {
             if (id != equipo.EquipoId)
             {
@@ -168,29 +156,34 @@ namespace LigaProTrabajoenGrupo.Controllers
             {
                 try
                 {
+                    // Si se ha subido un logo, lo guardamos
                     if (Logo != null)
                     {
                         var logoPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", Logo.FileName);
                         using (var stream = new FileStream(logoPath, FileMode.Create))
                         {
-                            await Logo.CopyToAsync(stream);
+                            Logo.CopyTo(stream);
                         }
                         equipo.Logo = Logo.FileName;
                     }
 
-                    _context.Update(equipo);
-                    await _context.SaveChangesAsync();
+                    // Actualizamos el equipo en la lista
+                    var equipoExistente = equipos.FirstOrDefault(e => e.EquipoId == id);
+                    if (equipoExistente != null)
+                    {
+                        equipoExistente.Nombre = equipo.Nombre;
+                        equipoExistente.Descripcion = equipo.Descripcion;
+                        equipoExistente.Logo = equipo.Logo;
+                        equipoExistente.Presupuesto = equipo.Presupuesto;
+                        equipoExistente.PartidosJugados = equipo.PartidosJugados;
+                        equipoExistente.PartidosGanados = equipo.PartidosGanados;
+                        equipoExistente.PartidosEmpatados = equipo.PartidosEmpatados;
+                        equipoExistente.PartidosPerdidos = equipo.PartidosPerdidos;
+                    }
                 }
-                catch (DbUpdateConcurrencyException)
+                catch
                 {
-                    if (!EquipoExists(equipo.EquipoId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    return View(equipo);
                 }
                 return RedirectToAction(nameof(List));
             }
@@ -198,15 +191,14 @@ namespace LigaProTrabajoenGrupo.Controllers
         }
 
         // GET: Equipos/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public IActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var equipo = await _context.Equipo
-                .FirstOrDefaultAsync(m => m.EquipoId == id);
+            var equipo = equipos.FirstOrDefault(e => e.EquipoId == id);
             if (equipo == null)
             {
                 return NotFound();
@@ -218,21 +210,16 @@ namespace LigaProTrabajoenGrupo.Controllers
         // POST: Equipos/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public IActionResult DeleteConfirmed(int id)
         {
-            var equipo = await _context.Equipo.FindAsync(id);
+            var equipo = equipos.FirstOrDefault(e => e.EquipoId == id);
             if (equipo != null)
             {
-                _context.Equipo.Remove(equipo);
+                equipos.Remove(equipo);
             }
 
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(List));
-        }
-
-        private bool EquipoExists(int id)
-        {
-            return _context.Equipo.Any(e => e.EquipoId == id);
         }
     }
 }
+

@@ -21,7 +21,8 @@
             <th>@Html.DisplayNameFor(model => model.PartidosGanados)</th>
             <th>@Html.DisplayNameFor(model => model.PartidosEmpatados)</th>
             <th>@Html.DisplayNameFor(model => model.PartidosPerdidos)</th>
-            <th>Acciones</th>
+            <th>Puntos Totales</th> <!-- Nueva columna para mostrar puntos totales -->
+            <th>Acciones</th> <!-- Columna de Acciones -->
         </tr>
     </thead>
     <tbody>
@@ -36,6 +37,7 @@
                 <td>@item.PartidosGanados</td>
                 <td>@item.PartidosEmpatados</td>
                 <td>@item.PartidosPerdidos</td>
+                <td>@item.Puntos</td> <!-- Mostrar los puntos totales calculados -->
                 <td>
                     <!-- Botón para abrir el modal de edición -->
                     <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editModal"
@@ -142,6 +144,8 @@
                     <dd class="col-sm-10" id="detailsPartidosEmpatados"></dd>
                     <dt class="col-sm-2">Partidos Perdidos</dt>
                     <dd class="col-sm-10" id="detailsPartidosPerdidos"></dd>
+                    <dt class="col-sm-2">Puntos</dt> <!-- Mostrar puntos aquí -->
+                    <dd class="col-sm-10" id="detailsPuntos"></dd> <!-- Puntos de solo lectura -->
                 </dl>
             </div>
         </div>
@@ -173,7 +177,7 @@
 
 @section Scripts {
     <script>
-        function openDetailsModal(id, nombre, descripcion, logo, presupuesto, partidosJugados, partidosGanados, partidosEmpatados, partidosPerdidos) {
+        function openDetailsModal(id, nombre, descripcion, logo, presupuesto, partidosJugados, partidosGanados, partidosEmpatados, partidosPerdidos, puntos) {
             document.getElementById('detailsNombre').textContent = nombre;
             document.getElementById('detailsDescripcion').textContent = descripcion;
             document.getElementById('detailsLogo').textContent = logo;
@@ -182,6 +186,7 @@
             document.getElementById('detailsPartidosGanados').textContent = partidosGanados;
             document.getElementById('detailsPartidosEmpatados').textContent = partidosEmpatados;
             document.getElementById('detailsPartidosPerdidos').textContent = partidosPerdidos;
+            document.getElementById('detailsPuntos').textContent = puntos;  // Mostrar puntos en detalles
         }
 
         function openEditModal(id, nombre, descripcion, logo, presupuesto, partidosJugados, partidosGanados, partidosEmpatados, partidosPerdidos) {

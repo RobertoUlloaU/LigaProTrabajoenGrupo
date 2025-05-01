@@ -33,13 +33,16 @@ namespace LigaProTrabajoenGrupo.Models
         [Range(0, int.MaxValue, ErrorMessage = "El número de partidos perdidos debe ser un valor positivo.")]
         public int PartidosPerdidos { get; set; }
 
-        // Calculo de puntos (3 puntos por victoria, 1 por empate)
-        [ScaffoldColumn(false)] //no debe generar un campo de entrada
+        // Ahora Puntos es una propiedad editable
         public int Puntos
         {
             get
             {
-                return (PartidosGanados * 3) + (PartidosEmpatados);
+                return (PartidosGanados * 3) + (PartidosEmpatados); // Cálculo de los puntos
+            }
+            set
+            {
+                
             }
         }
     }
