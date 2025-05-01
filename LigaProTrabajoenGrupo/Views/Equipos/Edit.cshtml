@@ -17,56 +17,56 @@
     <!-- Campo para editar el nombre del equipo -->
     <div class="form-group">
         <label for="Nombre">Nombre</label>
-        <input type="text" class="form-control" id="Nombre" asp-for="Nombre" />
+        <input type="text" class="form-control" asp-for="Nombre" />
         <span asp-validation-for="Nombre" class="text-danger"></span>
     </div>
 
     <!-- Campo para editar la descripción del equipo -->
     <div class="form-group">
         <label for="Descripcion">Descripción</label>
-        <textarea class="form-control" id="Descripcion" asp-for="Descripcion" rows="4"></textarea>
+        <textarea class="form-control" asp-for="Descripcion" rows="4"></textarea>
         <span asp-validation-for="Descripcion" class="text-danger"></span>
     </div>
 
-    <!-- Campo para subir el logo -->
+    <!-- Campo para subir el logo (opcional) -->
     <div class="form-group">
         <label for="Logo">Logo</label>
-        <input type="file" class="form-control" id="Logo" name="Logo" />
+        <input type="file" class="form-control" asp-for="Logo" />
         <span asp-validation-for="Logo" class="text-danger"></span>
     </div>
 
     <!-- Campo para editar el presupuesto del equipo -->
     <div class="form-group">
         <label for="Presupuesto">Presupuesto</label>
-        <input type="number" class="form-control" id="Presupuesto" asp-for="Presupuesto" />
+        <input type="number" class="form-control" asp-for="Presupuesto" />
         <span asp-validation-for="Presupuesto" class="text-danger"></span>
     </div>
 
     <!-- Campo para editar partidos jugados -->
     <div class="form-group">
         <label for="PartidosJugados">Partidos Jugados</label>
-        <input type="number" class="form-control" id="PartidosJugados" asp-for="PartidosJugados" />
+        <input type="number" class="form-control" asp-for="PartidosJugados" />
         <span asp-validation-for="PartidosJugados" class="text-danger"></span>
     </div>
 
     <!-- Campo para editar partidos ganados -->
     <div class="form-group">
         <label for="PartidosGanados">Partidos Ganados</label>
-        <input type="number" class="form-control" id="PartidosGanados" asp-for="PartidosGanados" />
+        <input type="number" class="form-control" asp-for="PartidosGanados" />
         <span asp-validation-for="PartidosGanados" class="text-danger"></span>
     </div>
 
     <!-- Campo para editar partidos empatados -->
     <div class="form-group">
         <label for="PartidosEmpatados">Partidos Empatados</label>
-        <input type="number" class="form-control" id="PartidosEmpatados" asp-for="PartidosEmpatados" />
+        <input type="number" class="form-control" asp-for="PartidosEmpatados" />
         <span asp-validation-for="PartidosEmpatados" class="text-danger"></span>
     </div>
 
     <!-- Campo para editar partidos perdidos -->
     <div class="form-group">
         <label for="PartidosPerdidos">Partidos Perdidos</label>
-        <input type="number" class="form-control" id="PartidosPerdidos" asp-for="PartidosPerdidos" />
+        <input type="number" class="form-control" asp-for="PartidosPerdidos" />
         <span asp-validation-for="PartidosPerdidos" class="text-danger"></span>
     </div>
 
@@ -80,4 +80,5 @@
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
 }
+
 

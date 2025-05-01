@@ -4,61 +4,65 @@
     ViewData["Title"] = "Detalles del Equipo";
 }
 
-<h1>Detalles del Equipo</h1>
+<h1>@ViewData["Title"]</h1>
 
 <div>
-    <h4>@Model.Nombre</h4>
+    <h4>Equipo</h4>
     <hr />
-    <table class="table">
-        <tbody>
-            <tr>
-                <td style="width: 40%;"><strong>@Html.DisplayNameFor(model => model.Nombre)</strong></td>
-                <td class="text-end" style="padding-left: 40px;">@Html.DisplayFor(model => model.Nombre)</td> <!-- Alineación a la derecha con espaciado -->
-            </tr>
-
-            <tr>
-                <td style="width: 40%;"><strong>@Html.DisplayNameFor(model => model.Descripcion)</strong></td>
-                <td class="text-end" style="padding-left: 40px;">@Html.DisplayFor(model => model.Descripcion)</td> <!-- Alineación a la derecha con espaciado -->
-            </tr>
-
-            <tr>
-                <td style="width: 40%;"><strong>@Html.DisplayNameFor(model => model.Logo)</strong></td>
-                <td style="padding-left: 40px;">@Html.DisplayFor(model => model.Logo)</td>
-            </tr>
-
-            <!-- Alineación con más espacio entre el nombre y el número para el Presupuesto -->
-            <tr>
-                <td style="width: 40%;"><strong>@Html.DisplayNameFor(model => model.Presupuesto)</strong></td>
-                <td class="text-end" style="padding-left: 40px; padding-right: 50px;">@Html.DisplayFor(model => model.Presupuesto)</td> <!-- Alineación a la derecha con más espaciado -->
-            </tr>
-
-            <tr>
-                <td style="width: 40%;"><strong>@Html.DisplayNameFor(model => model.PartidosJugados)</strong></td>
-                <td class="text-end" style="padding-left: 40px; padding-right: 40px;">@Html.DisplayFor(model => model.PartidosJugados)</td> <!-- Alineación a la derecha con espaciado -->
-            </tr>
-
-            <tr>
-                <td style="width: 40%;"><strong>@Html.DisplayNameFor(model => model.PartidosGanados)</strong></td>
-                <td class="text-end" style="padding-left: 40px; padding-right: 40px;">@Html.DisplayFor(model => model.PartidosGanados)</td> <!-- Alineación a la derecha con espaciado -->
-            </tr>
-
-            <tr>
-                <td style="width: 40%;"><strong>@Html.DisplayNameFor(model => model.PartidosEmpatados)</strong></td>
-                <td class="text-end" style="padding-left: 40px; padding-right: 40px;">@Html.DisplayFor(model => model.PartidosEmpatados)</td> <!-- Alineación a la derecha con espaciado -->
-            </tr>
-
-            <tr>
-                <td style="width: 40%;"><strong>@Html.DisplayNameFor(model => model.PartidosPerdidos)</strong></td>
-                <td class="text-end" style="padding-left: 40px; padding-right: 40px;">@Html.DisplayFor(model => model.PartidosPerdidos)</td> <!-- Alineación a la derecha con espaciado -->
-            </tr>
-        </tbody>
-    </table>
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Nombre)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Nombre)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Descripcion)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Descripcion)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Logo)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Logo)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Presupuesto)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Presupuesto)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.PartidosJugados)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.PartidosJugados)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.PartidosGanados)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.PartidosGanados)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.PartidosEmpatados)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.PartidosEmpatados)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.PartidosPerdidos)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.PartidosPerdidos)
+        </dd>
+    </dl>
 </div>
 
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.EquipoId">Editar</a> |
-    <a asp-action="Index">Volver a la Lista</a>
-</div>
+<a asp-action="Edit" asp-route-id="@Model?.EquipoId">Editar</a> |
+<a asp-action="Index">Volver a la lista</a>
 
 
 
