@@ -21,7 +21,7 @@
             <th>@Html.DisplayNameFor(model => model.PartidosGanados)</th>
             <th>@Html.DisplayNameFor(model => model.PartidosEmpatados)</th>
             <th>@Html.DisplayNameFor(model => model.PartidosPerdidos)</th>
-            <th>Acciones</th> <!-- Columna de Acciones -->
+            <th>Acciones</th>
         </tr>
     </thead>
     <tbody>
@@ -43,10 +43,10 @@
                         Editar
                     </button> |
                     <!-- Botón para abrir el modal de detalles -->
-                    <a class="btn btn-info" data-bs-toggle="modal" data-bs-target="#detailsModal"
-                       onclick="openDetailsModal('@item.EquipoId', '@item.Nombre', '@item.Descripcion', '@item.Logo', @item.Presupuesto, @item.PartidosJugados, @item.PartidosGanados, @item.PartidosEmpatados, @item.PartidosPerdidos)">
+                    <button class="btn btn-info" data-bs-toggle="modal" data-bs-target="#detailsModal"
+                            onclick="openDetailsModal('@item.EquipoId', '@item.Nombre', '@item.Descripcion', '@item.Logo', @item.Presupuesto, @item.PartidosJugados, @item.PartidosGanados, @item.PartidosEmpatados, @item.PartidosPerdidos)">
                         Detalles
-                    </a> |
+                    </button> |
                     <!-- Botón para abrir el modal de eliminación -->
                     <a class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal"
                        onclick="openDeleteModal(@item.EquipoId, '@item.Nombre')">Eliminar</a>
@@ -148,11 +148,32 @@
     </div>
 </div>
 
+<!-- Modal para eliminar equipo -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Eliminar Equipo</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>¿Estás seguro de que deseas eliminar este equipo?</p>
+                <p id="deleteEquipoName"></p>
+            </div>
+            <div class="modal-footer">
+                <form id="deleteForm" method="post" action="@Url.Action("Delete", "Equipos")">
+                    <input type="hidden" id="deleteEquipoId" name="EquipoId" />
+                    <button type="submit" class="btn btn-danger">Eliminar</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 @section Scripts {
     <script>
-        // Función para abrir el modal de detalles y llenar los campos
         function openDetailsModal(id, nombre, descripcion, logo, presupuesto, partidosJugados, partidosGanados, partidosEmpatados, partidosPerdidos) {
-            // Asignamos los valores de los campos al modal de detalles
             document.getElementById('detailsNombre').textContent = nombre;
             document.getElementById('detailsDescripcion').textContent = descripcion;
             document.getElementById('detailsLogo').textContent = logo;
@@ -163,7 +184,6 @@
             document.getElementById('detailsPartidosPerdidos').textContent = partidosPerdidos;
         }
 
-        // Función para abrir el modal de editar y llenar los campos
         function openEditModal(id, nombre, descripcion, logo, presupuesto, partidosJugados, partidosGanados, partidosEmpatados, partidosPerdidos) {
             document.getElementById('EquipoId').value = id;
             document.getElementById('Nombre').value = nombre;
@@ -176,16 +196,9 @@
             document.getElementById('PartidosPerdidos').value = partidosPerdidos;
         }
 
-        // Función para abrir el modal de eliminación y mostrar el nombre del equipo
         function openDeleteModal(id, nombre) {
             document.getElementById('deleteEquipoId').value = id;
             document.getElementById('deleteEquipoName').textContent = "Equipo: " + nombre;
         }
     </script>
 }
-
-
-
-
-
-
