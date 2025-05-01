@@ -30,6 +30,8 @@ namespace LigaProTrabajoenGrupo.Models
 
         // Relacion con el modelo Equipo
         public Equipo Equipo { get; set; }
+
+
     }
 
 }

@@ -15,5 +15,7 @@ namespace LigaProTrabajoenGrupo.Models
 
         // Tabla de los 5 equipos con mayor presupuesto
         public List<Equipo> EquiposConMayorPresupuesto { get; set; }
+
+        public List<Jugador> Jugadores { get; set; }
     }
 }
